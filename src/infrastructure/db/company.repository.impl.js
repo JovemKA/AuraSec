@@ -1,5 +1,5 @@
-import { CompanyModel } from './models/company.model';
-import { CompanyEntity } from '../../domain/entities/company.entity';
+import { Company } from './models/company.model.js';
+import { CompanyEntity } from '../../domain/entities/company.entity.js';
 
 export class CompanyRepositoryImpl {
   static toEntity(doc) {
@@ -18,32 +18,32 @@ export class CompanyRepositoryImpl {
   }
 
   async create(CompanyEntity) {
-    const created = await CompanyModel.create(CompanyEntity);
+    const created = await Company.create(CompanyEntity);
     return CompanyRepositoryImpl.toEntity(created);
   }
 
   async findById(id) {
-    const doc = await CompanyModel.findById(id);
+    const doc = await Company.findById(id);
     return CompanyRepositoryImpl.toEntity(doc);
   }
 
   async findAll(filter = {}) {
-    const docs = await CompanyModel.find(filter);
+    const docs = await Company.find(filter);
     return docs.map(CompanyRepositoryImpl.toEntity);
   }
 
   async update(id, updates) {
-    const doc = await CompanyModel.findByIdAndUpdate(id, { $set: updates }, { new: true });
+    const doc = await Company.findByIdAndUpdate(id, { $set: updates }, { new: true });
     return CompanyRepositoryImpl.toEntity(doc);
   }
 
   async delete(id) {
-    const res = await CompanyModel.findByIdAndDelete(id);
+    const res = await Company.findByIdAndDelete(id);
     return !!res;
   }
 
   async findByDomain(domain) {
-    const doc = await CompanyModel.findOne({ 'officialDomains': domain });
+    const doc = await Company.findOne({ 'officialDomains': domain });
     return CompanyRepositoryImpl.toEntity(doc);
   }
 }

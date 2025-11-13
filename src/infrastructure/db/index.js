@@ -2,9 +2,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import logger from '../../shared/logger.js';
 
-// import Client from './models/client.model.js';
-// import Analysis from './models/analysis.model.js';
-// import Takedown from './models/takedown.model.js';
+import { Company } from './models/company.model.js';
+import { MonitoredDomain } from './models/monitored-domain.model.js';
+import { Check } from './models/check.model.js';
+import { Alert } from './models/alert.model.js';
 
 dotenv.config();
 
@@ -40,7 +41,4 @@ export async function disconnectDB() {
   }
 }
 
-/**
- * Exporta os modelos (para usar em services/usecases)
- */
-// export { Client, Analysis, Takedown };
+export { Company, MonitoredDomain, Check, Alert };

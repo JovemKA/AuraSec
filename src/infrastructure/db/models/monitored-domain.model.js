@@ -10,6 +10,4 @@ const MonitoredDomainSchema = new mongoose.Schema({
   lastChecked: { type: Date },
 });
 
-MonitoredDomainSchema.index({ domain: 1 });
-
 export const MonitoredDomain = mongoose.model('MonitoredDomain', MonitoredDomainSchema);

@@ -25,4 +25,4 @@ CompanySchema.pre('save', function (next) {
 CompanySchema.index({ name: 1 }, { unique: true });
 CompanySchema.index({ 'officialDomains.domain': 1 });
 
-export const CompanyModel = mongoose.model('Company', CompanySchema);
+export const Company = mongoose.model('Company', CompanySchema);
