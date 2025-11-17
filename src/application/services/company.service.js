@@ -17,13 +17,11 @@ export class CompanyService {
       typeof d === 'string' ? { domain: d } : d
     );
 
-    // checar duplicidade por name
     const existingByName = await this.repo.findAll({ name: payload.name });
     if (existingByName && existingByName.length > 0) {
       throw new Error(`Company with name "${payload.name}" already exists`);
     }
 
-    // checar cada domain se já pertence a outra company
     for (const d of normalizedDomains) {
       const found = await this.repo.findByDomain(d.domain);
       if (found) {
@@ -56,7 +54,6 @@ export class CompanyService {
   }
 
   async listCompanies(filter = {}, opts = {}) {
-    // permitir busca por name ou status
     const q = {};
     if (filter.name) q.name = filter.name;
     if (filter.status) q.status = filter.status;
@@ -71,7 +68,6 @@ export class CompanyService {
 
     if (Object.keys(payload).length === 0) throw new Error('no valid fields to update');
 
-    // se alterar nome, garantir unicidade simples
     if (payload.name) {
       const exist = await this.repo.findAll({ name: payload.name });
       if (exist && exist.some(e => e.id !== id)) {
@@ -87,18 +83,14 @@ export class CompanyService {
     const domain = typeof domainData === 'string' ? domainData : domainData.domain;
     if (!domain) throw new Error('domain is required');
 
-    // verificar se já pertence a outra company
     const found = await this.repo.findByDomain(domain);
     if (found && String(found.id || found._id) !== String(companyId)) {
       throw new Error('domain already registered to another company');
     }
 
-    // buscar company existente
     const company = await this.repo.findById(companyId);
     if (!company) throw new Error('company not found');
 
-    // atualizar via repository: push no subdocumento
-    // construimos o objeto mínimo do domain
     const domainObj = {
       domain,
       source: domainData.source || 'manual',

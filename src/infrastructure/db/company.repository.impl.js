@@ -8,9 +8,9 @@ export class CompanyRepositoryImpl {
     return new CompanyEntity({
       id: obj._id?.toString(),
       name: obj.name,
-      officialDomains: obj.officialDomains,
-      brandKeywords: obj.brandKeywords,
-      alertEmails: obj.alertEmails,
+      officialDomains: obj.officialDomains || [],
+      brandKeywords: obj.brandKeywords || [],
+      alertEmails: obj.alertEmails || [],
       status: obj.status,
       createdAt: obj.createdAt,
       updatedAt: obj.updatedAt,
@@ -43,7 +43,7 @@ export class CompanyRepositoryImpl {
   }
 
   async findByDomain(domain) {
-    const doc = await Company.findOne({ 'officialDomains': domain });
+    const doc = await Company.findOne({ 'officialDomains.domain': domain });
     return CompanyRepositoryImpl.toEntity(doc);
   }
 }

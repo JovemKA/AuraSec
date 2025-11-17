@@ -1,6 +1,6 @@
 import express from 'express';
-import routes from './presentation/routes.js';
 import logger from './shared/logger.js';
+import routes from './presentation/routes.js';
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 });
 
 // Rotas
-app.use('/api', routes);
+app.use('', routes);
 
 // health-check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
