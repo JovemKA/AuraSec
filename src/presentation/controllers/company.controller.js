@@ -6,6 +6,7 @@ import { deleteCompanyUsecase } from '../../application/usecases/delete-company.
 import { addDomainUsecase } from '../../application/usecases/add-domain.usecase.js';
 
 export class CompanyController {
+  
   async create(req, res, next) {
     try {
       const result = await createCompanyUsecase(req.body);
