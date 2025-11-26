@@ -1,14 +1,17 @@
-import { createCompanyUsecase } from '../../application/usecases/create-company.usecase.js';
-import { getCompanyUsecase } from '../../application/usecases/get-company.usecase.js';
-import { listCompaniesUsecase } from '../../application/usecases/list-companies.usecase.js';
-import { updateCompanyUsecase } from '../../application/usecases/update-company.usecase.js';
-import { deleteCompanyUsecase } from '../../application/usecases/delete-company.usecase.js';
-import { addDomainUsecase } from '../../application/usecases/add-domain.usecase.js';
+import {
+  create,
+  getById,
+  listCompanies,
+  update,
+  remove,
+  addDomain
+} from '../../application/usecases/company.usecases.js';
 
 export class CompanyController {
+  
   async create(req, res, next) {
     try {
-      const result = await createCompanyUsecase(req.body);
+      const result = await create(req.body);
       return res.status(201).json(result);
     } catch (err) {
       next(err);
@@ -18,7 +21,7 @@ export class CompanyController {
   async getById(req, res, next) {
     try {
       const { id } = req.params;
-      const result = await getCompanyUsecase(id);
+      const result = await getById(id);
       if (!result) return res.status(404).json({ message: 'Company not found' });
       return res.json(result);
     } catch (err) {
@@ -29,7 +32,7 @@ export class CompanyController {
   async list(req, res, next) {
     try {
       const { name, status } = req.query;
-      const result = await listCompaniesUsecase({ name, status });
+      const result = await listCompanies({ name, status });
       return res.json(result);
     } catch (err) {
       next(err);
@@ -39,7 +42,7 @@ export class CompanyController {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      const result = await updateCompanyUsecase(id, req.body);
+      const result = await update(id, req.body);
       if (!result) return res.status(404).json({ message: 'Company not found' });
       return res.json(result);
     } catch (err) {
@@ -50,7 +53,7 @@ export class CompanyController {
   async delete(req, res, next) {
     try {
       const { id } = req.params;
-      const ok = await deleteCompanyUsecase(id);
+      const ok = await remove(id);
       if (!ok) return res.status(404).json({ message: 'Company not found' });
       return res.json({ message: 'Company deleted successfully' });
     } catch (err) {
@@ -61,7 +64,7 @@ export class CompanyController {
   async addDomain(req, res, next) {
     try {
       const { id } = req.params;
-      const result = await addDomainUsecase(id, req.body);
+      const result = await addDomain(id, req.body);
       return res.json(result);
     } catch (err) {
       next(err);

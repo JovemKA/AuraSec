@@ -8,6 +8,8 @@ const MonitoredDomainSchema = new mongoose.Schema({
   status: { type: String, enum: ['pending', 'checked', 'alerted'], default: 'pending' },
   firstSeen: { type: Date, default: Date.now },
   lastChecked: { type: Date },
+}, {
+  collection: 'monitored_domains',
 });
 
 export const MonitoredDomain = mongoose.model('MonitoredDomain', MonitoredDomainSchema);
