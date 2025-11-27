@@ -1,5 +1,6 @@
 import { CompanyRepositoryImpl } from '../../infrastructure/db/company.repository.impl.js';
 import { CompanyEntity } from '../../domain/entities/company.entity.js';
+import * as whoisService from '../../infrastructure/whois/whois.service.js';
 
 export class CompanyService {
   constructor(repository = null) {
@@ -43,9 +44,19 @@ export class CompanyService {
       status: payload.status || 'active'
     });
 
+    const whoisEnriched = [];
+
+    for (const item of entity.officialDomains) {
+      const info = await whoisService.analyzeOfficialDomain(item.domain);
+      whoisEnriched.push(info);
+    }
+
     // Persistir
     const created = await this.repo.create(entity.toJSON ? entity.toJSON() : entity);
-    return created;
+    return {
+      company: created,
+      whoisEnriched
+    };
   }
 
   async getCompanyById(id) {

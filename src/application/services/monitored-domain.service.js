@@ -1,5 +1,7 @@
 import { MonitoredDomainRepositoryImpl } from '../../infrastructure/db/monitored-domain.repository.impl.js';
 import { MonitoredDomainEntity } from '../../domain/entities/monitored-domain.entity.js';
+import * as whoisService from "../../infrastructure/whois/whois.service.js";
+import * as virusTotal from "../../infrastructure/feeds/virustotal.api.js";
 
 export class MonitoredDomainService {
   constructor(repository = null) {
@@ -16,6 +18,8 @@ export class MonitoredDomainService {
       throw new Error(`Domain ${payload.domain} is already being monitored`);
     }
 
+    const vtInfo = await virusTotal.analyzeDomainVT(payload.domain);
+
     const entity = new MonitoredDomainEntity({
       companyId: payload.companyId,
       domain: payload.domain,
@@ -26,7 +30,12 @@ export class MonitoredDomainService {
       lastChecked: null
     });
 
-    return this.repo.create(entity.toJSON ? entity.toJSON() : entity);
+    const created = await this.repo.create(entity.toJSON ? entity.toJSON() : entity);
+    return {
+      created,
+      virusTotal: vtInfo,
+      analyzedAt: new Date().toISOString(),
+    };
   }
 
   async getById(id) {

@@ -12,7 +12,11 @@ export class CompanyController {
   async create(req, res, next) {
     try {
       const result = await create(req.body);
-      return res.status(201).json(result);
+      return res.status(201).json({
+        success: true,
+        company: result.company,
+        whoisEnriched: result.whoisEnriched,
+      });
     } catch (err) {
       next(err);
     }
